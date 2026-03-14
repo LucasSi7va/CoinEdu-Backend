@@ -14,16 +14,3 @@ services:
     container_name: redis_coinedu
     ports:
       - "6379:6379"
-
-  api:
-    build: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-      - redis
-    environment:
-      - DB_HOST=db  # Nome do serviço acima
-      - REDIS_HOST=redis
-      - DB_USER=user
-      - DB_PASSWORD=password

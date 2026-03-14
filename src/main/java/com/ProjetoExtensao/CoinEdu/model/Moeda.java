@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "moeda")
@@ -16,16 +16,19 @@ public class Moeda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false , unique = true)
     private String sigla;
     @Column(nullable = false)
     private String nome;
+
     @Column(nullable = false , precision = 20, scale = 10)
     private BigDecimal precoAtual;
 
+    @Column(precision = 25, scale = 2)
     private BigDecimal marketCap;
-    private BigDecimal ultimaAtualizacao;
+
+    private LocalDateTime ultimaAtualizacao;
 
 }
