@@ -2,26 +2,16 @@ spring:
   application:
     name: CoinEdu
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-  cache:
-    type: redis
-
-
 
   datasource:
-    #url: jdbc:h2:mem:apocalipse;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    url: jdbc:postgresql://localhost:5432/CoinEdu
+    url: jdbc:postgresql://localhost:5432/coinedu
     driver-class-name: org.postgresql.Driver
-    username: user
-    password: password
+    username: admin
+    password: LucasGamer123
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
