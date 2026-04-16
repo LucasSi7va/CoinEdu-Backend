@@ -12,23 +12,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "moeda")
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
-public class Moeda {
+public class Favoritos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false , unique = true)
-    private String sigla;
-    @Column(nullable = false)
-    private String nome;
+    @Column(name = "sigla", nullable = false , unique = true)
+    private String cryptoId;
 
-    @Column(nullable = false , precision = 20, scale = 10)
-    private BigDecimal precoAtual;
-
-    @Column(precision = 25, scale = 2)
-    private BigDecimal marketCap;
-
-    private LocalDateTime ultimaAtualizacao;
 
 }

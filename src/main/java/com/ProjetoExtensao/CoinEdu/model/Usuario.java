@@ -14,15 +14,20 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+
+    @Column(name = "nome",nullable = false)
     private String nome;
 
-    @Column(nullable = false , unique = true)
+
+    @Column(name = "email", nullable = false , unique = true)
     private String email;
 
-    @Column(nullable = false , length = 60)
+
+    @Column(name = "senha", nullable = false , length = 60)
     private String senha;
 
+
+    @JoinColumn(name = "carteira_id")
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true /* se o usuario for excluido a carteira tambem sera */  )
     private Carteira carteira;
 

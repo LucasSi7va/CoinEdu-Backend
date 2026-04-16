@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
 @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(e.getMessage());
+                .body("Erro: " +e.getMessage());
     }
 
 }

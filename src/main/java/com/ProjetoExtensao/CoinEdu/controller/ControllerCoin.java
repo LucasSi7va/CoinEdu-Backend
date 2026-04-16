@@ -3,6 +3,7 @@ package com.ProjetoExtensao.CoinEdu.controller;
 import com.ProjetoExtensao.CoinEdu.dto.MoedaDto;
 import com.ProjetoExtensao.CoinEdu.dto.filtroGlobal.FiltroGlobal;
 import com.ProjetoExtensao.CoinEdu.service.ServiceMoedaAPI;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/coin")
+@AllArgsConstructor
 public class ControllerCoin {
     @Autowired
-    private ServiceMoedaAPI serviceMoedaAPI;
+    private final ServiceMoedaAPI serviceMoedaAPI;
+
+
+
 
     @GetMapping
     public Mono<List<MoedaDto>> verPreco() {
@@ -33,6 +38,8 @@ public class ControllerCoin {
         return serviceMoedaAPI.buscarFiltro(filtroGlobal)
                 .map(ResponseEntity::ok);
     }
+
+
 
 
 }
