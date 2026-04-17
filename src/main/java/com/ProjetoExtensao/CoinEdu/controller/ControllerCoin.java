@@ -20,26 +20,19 @@ public class ControllerCoin {
     private final ServiceMoedaAPI serviceMoedaAPI;
 
 
-
-
     @GetMapping
-    public Mono<List<MoedaDto>> verPreco() {
+    public List<MoedaDto> verPreco() {
         return serviceMoedaAPI.getMercado();
     }
 
     @GetMapping("/nome/{nome}")
-    public Mono<ResponseEntity<List<MoedaDto>>> buscarNome(@RequestParam String nome) {
-        return serviceMoedaAPI.buscarNome(nome)
-                .map(ResponseEntity::ok);
+    public ResponseEntity<List<MoedaDto>> buscarNome(@RequestParam String nome) {
+        return ResponseEntity.ok(serviceMoedaAPI.buscarNome(nome));
     }
 
     @GetMapping("/filtra")
-    public Mono<ResponseEntity<List<MoedaDto>>> buscarFiltro(FiltroGlobal filtroGlobal) {
-        return serviceMoedaAPI.buscarFiltro(filtroGlobal)
-                .map(ResponseEntity::ok);
+    public ResponseEntity<List<MoedaDto>> buscarFiltro(FiltroGlobal filtroGlobal) {
+        return ResponseEntity.ok(serviceMoedaAPI.buscarFiltro(filtroGlobal));
     }
-
-
-
 
 }

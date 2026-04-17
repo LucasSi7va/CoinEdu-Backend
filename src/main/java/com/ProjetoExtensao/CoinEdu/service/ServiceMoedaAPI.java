@@ -20,36 +20,36 @@ public class ServiceMoedaAPI {
 
     @Cacheable("moeda")
     @CircuitBreaker(name = "coinGecko", fallbackMethod = "fallbackSimlpes")
-    public Mono<List<MoedaDto>> getMercado() {
+    public List<MoedaDto> getMercado() {
         return api.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/coins/markets")
                         .queryParam("vs_currency", "brl")
                         .build())
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<MoedaDto>>() {});
+                .bodyToMono(new ParameterizedTypeReference<List<MoedaDto>>() {})
+                .block();
     }
 
-    public Mono<List<Map<String, Object>>> fallbackSimlpes(Throwable t) {
+    public List<MoedaDto> fallbackSimlpes(Throwable t) {
         System.out.println("Erro na CoinGecko: " + t.getMessage());
-        return Mono.just(List.of());
+        return List.of();
     }
 
-    public Mono<List<MoedaDto>> buscarNome(String nome) {
-        return getMercado()
-                .map(lista -> lista.stream()
-                        .filter(moedaDto ->  moedaDto.nome()
-                                .toLowerCase()
-                                .contains(nome.toLowerCase())).toList());
+    public List<MoedaDto> buscarNome(String nome) {
+        return getMercado().stream()
+                .filter(moedaDto -> moedaDto.nome()
+                        .toLowerCase()
+                        .contains(nome.toLowerCase()))
+                .toList();
     }
 
 
-    public Mono<List<MoedaDto>> buscarFiltro(FiltroGlobal filtroGlobal) {
-    return getMercado()
-            .map(lista -> lista.stream()
-                    .filter(m -> (filtroGlobal.precoMax() == null || m.precoAtual() <= filtroGlobal.precoMax()))
-                    .filter(m -> (filtroGlobal.rank() == null || m.rank() >= filtroGlobal.rank()))
-                    .toList());
+    public List<MoedaDto> buscarFiltro(FiltroGlobal filtroGlobal) {
+        return getMercado().stream()
+                .filter(m -> (filtroGlobal.precoMax() == null || m.precoAtual() <= filtroGlobal.precoMax()))
+                .filter(m -> (filtroGlobal.rank() == null || m.rank() >= filtroGlobal.rank()))
+                .toList();
     }
 }
 
