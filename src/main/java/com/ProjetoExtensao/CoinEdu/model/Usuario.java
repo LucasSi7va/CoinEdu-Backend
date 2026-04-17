@@ -27,8 +27,7 @@ public class Usuario {
     private String senha;
 
 
-    @JoinColumn(name = "carteira_id")
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true /* se o usuario for excluido a carteira tambem sera */  )
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Carteira carteira;
 
 }
