@@ -30,4 +30,9 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Carteira carteira;
 
+
+    @Column(name = "modo_idoso" , nullable = false)
+    private Boolean modoIdoso = false;
+
 }
+

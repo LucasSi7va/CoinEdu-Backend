@@ -18,7 +18,7 @@ public record MoedaDto(
        Double precoAtual,
 
         @JsonProperty("price_change_percentage_24h")
-        Double preco24h,
+        Double variacao24h,
 
         @JsonProperty("market_cap_rank")
         Integer rank,

@@ -35,4 +35,12 @@ public class ControllerCoin {
         return ResponseEntity.ok(serviceMoedaAPI.buscarFiltro(filtroGlobal));
     }
 
+
+    @GetMapping("/{id}/historico")
+    public Map<String, Object> getHistorico(
+            @PathVariable String id,
+            @RequestParam(defaultValue = "3") int dias) {
+        return serviceMoedaAPI.getHistoricoPorDias(id, dias);
+    }
+
 }

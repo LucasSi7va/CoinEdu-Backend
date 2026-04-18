@@ -1,8 +1,10 @@
 package com.ProjetoExtensao.CoinEdu.service;
 
+import com.ProjetoExtensao.CoinEdu.dto.ModoIdosoDto;
 import com.ProjetoExtensao.CoinEdu.dto.MoedaDto;
 import com.ProjetoExtensao.CoinEdu.dto.UsuarioCarteiraDTO;
 import com.ProjetoExtensao.CoinEdu.dto.UsuarioDto;
+import com.ProjetoExtensao.CoinEdu.dto.filtroGlobal.FiltroGlobal;
 import com.ProjetoExtensao.CoinEdu.model.Carteira;
 import com.ProjetoExtensao.CoinEdu.model.Usuario;
 import com.ProjetoExtensao.CoinEdu.repository.UsuarioRepository;
@@ -70,8 +72,11 @@ public class ServiceUsuario {
         );
     }
 
-    public ResponseEntity<UsuarioCarteiraDTO> acessarLogin(String email) {
-       Usuario usuario = usuarioRepository.buscarPorCompleto(email).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+    public ResponseEntity<UsuarioCarteiraDTO> acessarLogin(FiltroGlobal filtroGlobal) {
+
+        Usuario usuario = usuarioRepository.buscarPorCompleto(filtroGlobal.email() , filtroGlobal.nome()).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+
+
 
        List<MoedaDto> favoritas = serviceMoedaAPI.getMercado()
                .stream()
@@ -88,7 +93,22 @@ public class ServiceUsuario {
 
     }
 
+    public ResponseEntity<ModoIdosoDto> ModoIdoso(Long id) {
+    Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
 
+    usuario.setModoIdoso(!usuario.getModoIdoso());
 
+    boolean valorAtual = (usuario.getModoIdoso() == null) ? false : usuario.getModoIdoso();
+    usuario.setModoIdoso(!valorAtual);
 
+    usuarioRepository.save(usuario);
+
+    return ResponseEntity.ok(new ModoIdosoDto(
+            usuario.getId(),
+            usuario.getNome(),
+            usuario.getEmail(),
+            usuario.getSenha(),
+            usuario.getModoIdoso()
+    ));
+    }
 }
