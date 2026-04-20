@@ -76,7 +76,7 @@ public ResponseEntity<String> favoritar(
 
     @PatchMapping("/{id}/alternar-modo-idoso")
     public ResponseEntity<ModoIdosoDto> ModoIdoso(@PathVariable Long id) {
-        return serviceUsuario.ModoIdoso(id);
+        return serviceUsuario.modoIdoso(id);
     }
 
 

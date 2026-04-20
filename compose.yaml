@@ -11,5 +11,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+
+elasticsearch:
+  image: elasticsearch:8.13.0
+  container_name: elastic_coinedu
+  environment:
+    - discovery.type=single-node
+    - xpack.security.enabled=false
+  ports:
+    - "9200:9200"
+  volumes:
+    - elastic_data:/usr/share/elasticsearch/data
+
+
+
 volumes:
   postgres_data:
+  elastic_data:

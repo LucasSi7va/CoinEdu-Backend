@@ -87,28 +87,26 @@ public class ServiceUsuario {
         return ResponseEntity.ok(new UsuarioCarteiraDTO(
         usuario.getNome() ,
         usuario.getEmail() ,
-        usuario.getSenha() ,
         favoritas
         ));
 
     }
 
-    public ResponseEntity<ModoIdosoDto> ModoIdoso(Long id) {
-    Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+    public ResponseEntity<ModoIdosoDto> modoIdoso(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
 
-    usuario.setModoIdoso(!usuario.getModoIdoso());
+        boolean valorAtual = usuario.getModoIdoso() != null && usuario.getModoIdoso();
+        usuario.setModoIdoso(!valorAtual);
 
-    boolean valorAtual = (usuario.getModoIdoso() == null) ? false : usuario.getModoIdoso();
-    usuario.setModoIdoso(!valorAtual);
+        usuarioRepository.save(usuario);
 
-    usuarioRepository.save(usuario);
-
-    return ResponseEntity.ok(new ModoIdosoDto(
-            usuario.getId(),
-            usuario.getNome(),
-            usuario.getEmail(),
-            usuario.getSenha(),
-            usuario.getModoIdoso()
-    ));
+        return ResponseEntity.ok(new ModoIdosoDto(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getSenha(),
+                usuario.getModoIdoso()
+        ));
     }
 }

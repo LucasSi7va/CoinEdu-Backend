@@ -1,9 +1,11 @@
 package com.ProjetoExtensao.CoinEdu.service;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.ProjetoExtensao.CoinEdu.dto.HistoricoDto;
 import com.ProjetoExtensao.CoinEdu.dto.MoedaDto;
 import com.ProjetoExtensao.CoinEdu.dto.filtroGlobal.FiltroGlobal;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ import java.util.Map;
 
 @Service
 public class ServiceMoedaAPI {
+
+    @Autowired
+    private ElasticsearchClient elasticsearchClient;
 
     private final WebClient api = WebClient.create("https://api.coingecko.com/api/v3");
 

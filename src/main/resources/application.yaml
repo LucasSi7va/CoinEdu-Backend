@@ -20,3 +20,6 @@ spring:
 
 
   debug: true
+
+elasticsearch:
+  uris: http://localhost:9200
