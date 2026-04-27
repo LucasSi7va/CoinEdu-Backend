@@ -242,5 +242,3 @@ Componentes principais:
 ![React](https://img.shields.io/badge/React-18-blue?logo=react)
 
 
-## falta para terminar 
- ferramentas , Modelo de Dados Mínimo
