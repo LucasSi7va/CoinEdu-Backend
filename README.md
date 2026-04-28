@@ -241,4 +241,13 @@ Componentes principais:
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?logo=springboot)
 ![React](https://img.shields.io/badge/React-18-blue?logo=react)
 
+#Funfionamento do sistema
+
+para rodar o sistema voce precisa abrir uma linha de comando dentro do projeto e digitar:
+
+```
+docker compose up -d
+```
+
+
 
