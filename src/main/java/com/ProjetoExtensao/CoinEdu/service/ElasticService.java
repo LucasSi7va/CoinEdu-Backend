@@ -35,14 +35,22 @@ public class ElasticService {
         try {
             boolean exists = elasticsearchClient.indices().exists(e -> e.index("moedas")).value();
             if (!exists) {
-                elasticsearchClient.indices().create(c -> c.index("moedas"));
+                elasticsearchClient.indices().create(c -> c
+                        .index("moedas")
+                        .mappings(m -> m
+                                .properties("nome", p -> p
+                                        .text(t -> t
+                                                .fields("keyword", f -> f.keyword(k -> k))
+                                        )
+                                )
+                        )
+                );
             }
             sincronizarMoedas();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     @Scheduled(initialDelay = 5000, fixedDelay = 60000)
     public void atualizarMoedas() throws IOException {
@@ -73,6 +81,7 @@ public class ElasticService {
             m.setId(moeda.id());
             m.setNome(moeda.nome());
             m.setSimbolo(moeda.symbol());
+            m.setImagem(moeda.imagem());
             m.setPrecoAtual(BigDecimal.valueOf(moeda.precoAtual()));
             m.setRank(moeda.rank());
             m.setMarketCap(BigDecimal.valueOf(moeda.marketCap()));
@@ -107,10 +116,26 @@ public class ElasticService {
         SearchResponse<Moeda> response = elasticsearchClient.search(s -> s
                         .index("moedas")
                         .query(q -> q
-                                .match(m -> m
-                                        .field("nome")
-                                        .query(nome)
-                                        .fuzziness("AUTO"))) ,
+                                .bool(b -> b
+                                        .should(sh -> sh.match(m -> m
+                                                .field("nome")
+                                                .query(nome)
+                                                .fuzziness("AUTO")
+                                                .boost(2.0f)
+                                        ))
+
+                                        .should(sh -> sh.prefix(p -> p
+                                                .field("nome.keyword")
+                                                .value(nome.toLowerCase())
+                                        ))
+
+                                        .should(sh -> sh.wildcard(w -> w
+                                                .field("nome")
+                                                .value("*" + nome.toLowerCase() + "*")
+                                        ))
+                                        .minimumShouldMatch("1")
+                                )
+                        ),
                 Moeda.class);
 
         return response.hits().hits().stream().map(Hit::source).toList();
@@ -126,6 +151,10 @@ public class ElasticService {
                                             .ifPresent(precoAtual -> b.filter(f -> f
                                                     .range(r -> r.field("precoAtual").lte(JsonData.of(precoAtual)))
                                             ));
+                                    Optional.ofNullable(filtroGlobal.precoMin())
+                                                    .ifPresent(precoAtual -> b.filter(f -> f
+                                                            .range(r -> r.field("precoAtual").gte(JsonData.of(precoAtual)))));
+
 
                                     Optional.ofNullable(filtroGlobal.rank())
                                             .ifPresent(rank -> b.filter(f -> f

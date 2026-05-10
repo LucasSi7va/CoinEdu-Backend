@@ -9,7 +9,6 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 @Document(indexName = "moedas")
 @Getter
@@ -24,6 +23,9 @@ public class Moeda {
 
     @Field(type = FieldType.Keyword , name = "simbolo")
     private String simbolo;
+
+    @Field(type = FieldType.Keyword , name = "imagem")
+    private String imagem;
 
     @Field(type = FieldType.Double , name = "preco_atual")
     private BigDecimal precoAtual;

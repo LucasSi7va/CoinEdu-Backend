@@ -1,6 +1,6 @@
 package com.ProjetoExtensao.CoinEdu.service;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
+
 import com.ProjetoExtensao.CoinEdu.dto.HistoricoDto;
 import com.ProjetoExtensao.CoinEdu.dto.MoedaDto;
 import com.ProjetoExtensao.CoinEdu.dto.filtroGlobal.FiltroGlobal;
@@ -12,11 +12,14 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.IOException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Service
@@ -94,6 +97,20 @@ public class ServiceMoedaAPI {
         return getHistorico(moedaId, data);
     }
 
+
+    public List<Map<String, Object>> getListaHistorico(String moedaId, int dias) {
+        return IntStream.range(0, dias)
+                .mapToObj(i -> {
+                    try {
+                        return getHistoricoPorDias(moedaId, i);
+                    } catch (Exception e) {
+                        System.out.println("Sem dados para dia -" + i + ": " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull) // Remove os nulos
+                .collect(Collectors.toList());
+    }
 
 
     private List<MoedaDto> buscarNome(String nome) {
