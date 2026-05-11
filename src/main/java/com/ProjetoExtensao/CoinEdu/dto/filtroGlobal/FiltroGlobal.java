@@ -3,12 +3,6 @@ package com.ProjetoExtensao.CoinEdu.dto.filtroGlobal;
 public record FiltroGlobal(
         Double precoMax,
         Double precoMin,
-        Integer rank ,
-
-
-
-        // buscar usuario
-        String nome ,
-        String email
+        Integer rank
 ) {
 }

@@ -42,9 +42,20 @@ public ResponseEntity<UsuarioDto> confirmarCadastro(
 return serviceUsuario.confirmarCadastro(dto.email() , dto.codigo());
 }
 
-@GetMapping("/login")
-public ResponseEntity<UsuarioCarteiraDTO> login(FiltroGlobal filtroGlobal){
-    return serviceUsuario.acessarLogin(filtroGlobal);
+@PostMapping("/login")
+public ResponseEntity<UsuarioCarteiraDTO> login(@RequestBody LoginDto loginDto){
+    return serviceUsuario.acessarLogin(loginDto);
+}
+
+@PostMapping("/editar-fotoPerfil")
+public ResponseEntity<String> ajustarFoto(@RequestParam String email , @RequestParam String foto){
+    return serviceUsuario.atualizarFoto(email ,foto);
+}
+
+
+@PostMapping("/editar-fotoPerfil/capaPerfil")
+public ResponseEntity<String> ajustarFotoECapa(@RequestBody PerfilRequestDto requestDto){
+    return serviceUsuario.atualizarCapaDePefil(requestDto.email(), requestDto.fotoPerfil(), requestDto.capaPerfil());
 }
 
 

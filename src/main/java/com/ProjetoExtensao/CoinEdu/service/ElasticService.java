@@ -26,10 +26,6 @@ public class ElasticService {
     private final ElasticsearchClient elasticsearchClient;
     private final ServiceMoedaAPI serviceMoedaAPI;
 
-
-
-
-
     @PostConstruct
     public void setup() {
         try {
@@ -94,9 +90,6 @@ public class ElasticService {
 
 
     }
-
-
-
 
     public List<Moeda> listarTudo() throws IOException {
         SearchResponse<Moeda> response = elasticsearchClient.search(s -> s
@@ -167,8 +160,5 @@ public class ElasticService {
 
         return response.hits().hits().stream().map(Hit::source).toList();
     }
-
-
-
 
 }

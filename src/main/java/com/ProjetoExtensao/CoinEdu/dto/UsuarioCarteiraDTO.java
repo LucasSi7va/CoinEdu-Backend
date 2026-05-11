@@ -5,6 +5,8 @@ import java.util.List;
 public record UsuarioCarteiraDTO(
         String nome,
         String email,
+        String fotoPerfil ,
+        String capaPerfil ,
         List<MoedaDto> moeda
 ) {
 }

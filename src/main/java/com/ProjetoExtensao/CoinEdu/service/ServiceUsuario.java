@@ -47,8 +47,10 @@ public class ServiceUsuario {
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                usuario.getSenha())
-        );
+                usuario.getSenha() ,
+                usuario.getFotoPerfil() ,
+                usuario.getCapaPerfil()
+        ));
     }
 
 
@@ -79,6 +81,15 @@ public class ServiceUsuario {
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
         String codigo = emailService.gerarCodigo();
+
+
+        if (usuario.getFotoPerfil() == null) {
+            usuario.setFotoPerfil("https://i.pinimg.com/1200x/f0/2a/8c/f02a8c54b85505713fdaf12d4de3df20.jpg" + usuario.getNome());
+        }
+
+        if (usuario.getCapaPerfil() == null) {
+            usuario.setCapaPerfil("default-cover-url.jpg");
+        }
 
         pendentes.put(usuario.getEmail() , new PendenteCadastroDto(
                 usuario , codigo , LocalDateTime.now().plusMinutes(15)
@@ -126,17 +137,21 @@ public class ServiceUsuario {
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                usuario.getSenha()
+                usuario.getSenha() ,
+                usuario.getFotoPerfil() ,
+                usuario.getCapaPerfil()
         ));
     }
 
 
 
-    public ResponseEntity<UsuarioCarteiraDTO> acessarLogin(FiltroGlobal filtroGlobal) {
+    public ResponseEntity<UsuarioCarteiraDTO> acessarLogin(LoginDto loginDto) {
 
-        Usuario usuario = usuarioRepository.buscarPorCompleto(filtroGlobal.email() , filtroGlobal.nome()).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+        Usuario usuario = usuarioRepository.findByEmail(loginDto.email()).orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 
-
+        if (!passwordEncoder.matches(loginDto.senha() , usuario.getSenha())) {
+            throw new RuntimeException("Senha invãlida");
+        }
 
        List<MoedaDto> favoritas = serviceMoedaAPI.getMercado()
                .stream()
@@ -147,10 +162,37 @@ public class ServiceUsuario {
         return ResponseEntity.ok(new UsuarioCarteiraDTO(
         usuario.getNome() ,
         usuario.getEmail() ,
+        usuario.getFotoPerfil(),
+        usuario.getCapaPerfil(),
         favoritas
         ));
 
     }
+
+    public ResponseEntity<String> atualizarFoto(String email , String novaFoto) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+
+        usuario.setFotoPerfil(novaFoto);
+        usuarioRepository.save(usuario);
+
+    return ResponseEntity.ok("Foto atualizada com sucesso");
+    }
+
+
+    public ResponseEntity<String> atualizarCapaDePefil(String email , String fotoPerfil  , String fotoCapa){
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+
+        usuario.setFotoPerfil(fotoPerfil);
+        usuario.setCapaPerfil(fotoCapa);
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.ok("Foto atualizada com sucesso");
+
+    }
+
+
 
     public ResponseEntity<ModoIdosoDto> modoIdoso(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
@@ -169,6 +211,4 @@ public class ServiceUsuario {
                 usuario.getModoIdoso()
         ));
     }
-
-
 }

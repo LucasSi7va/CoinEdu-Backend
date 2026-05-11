@@ -28,6 +28,11 @@ public class Usuario {
     @Column(name = "senha", nullable = false , length = 60)
     private String senha;
 
+    @Column(name = "foto-perfil")
+    private String fotoPerfil;
+
+    @Column(name = "capa-perfil")
+    private String capaPerfil;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Carteira carteira;
