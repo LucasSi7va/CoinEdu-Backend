@@ -4,6 +4,5 @@ public record UsuarioDto(
         Long id,
         String nome,
         String email ,
-        String senha
-) {
+        String senha ) {
 }

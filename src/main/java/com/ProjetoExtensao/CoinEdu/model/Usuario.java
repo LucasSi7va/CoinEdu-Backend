@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "usuario")
 @AllArgsConstructor  @Getter @Setter @NoArgsConstructor
@@ -34,5 +36,13 @@ public class Usuario {
     @Column(name = "modo_idoso" , nullable = false)
     private Boolean modoIdoso = false;
 
+    @Column(nullable = false)
+    private Boolean verificado = false;
+
+    @Column
+    private String codigoVerificacao;
+
+    @Column
+    private LocalDateTime codigoExpiracao;
 }
 

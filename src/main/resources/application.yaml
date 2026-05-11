@@ -2,7 +2,6 @@ spring:
   application:
     name: CoinEdu
 
-
   datasource:
     url: jdbc:postgresql://localhost:5432/coinedu
     driver-class-name: org.postgresql.Driver
@@ -18,8 +17,17 @@ spring:
         format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-
-  debug: true
-
   elasticsearch:
-   uris: http://localhost:9200
+    uris: http://localhost:9200
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: coinedu64@gmail.com
+    password: "lkzj bjpl ydqi yvle"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
