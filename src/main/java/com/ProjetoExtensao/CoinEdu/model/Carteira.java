@@ -7,29 +7,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "carteira")
-@AllArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
-public class Carteira
-{
+public class Carteira {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
 
-    @JoinColumn(name = "usuario_id" , nullable = false)
+    @JoinColumn(name = "usuario_id")
+    @OneToOne
     private Usuario usuario;
 
-    @Column(precision = 20, scale = 10)
-    private BigDecimal saldoFiat = BigDecimal.ZERO;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "moedas_favoritas" , joinColumns = @JoinColumn(name = "carteira_id"))
+    @Column(name = "moeda_id")
+    private List<String> moedasFavoritas;
 
-
-    @OneToMany(mappedBy = "carteira" , cascade = CascadeType.ALL)
-    private List<AtivoCarteira> ativos = new ArrayList<>();
+    @Column(precision = 25, scale = 2)
+    private BigDecimal saldoSimulado;
 }

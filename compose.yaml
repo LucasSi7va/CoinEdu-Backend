@@ -3,27 +3,28 @@ services:
     image: postgres:15
     container_name: postgres_coinedu
     environment:
-      POSTGRES_DB: CoinEdu
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: coinedu
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: LucasGamer123
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-  redis:
-    image: redis:alpine
-    container_name: redis_coinedu
-    ports:
-      - "6379:6379"
 
-  api:
-    build: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-      - redis
+  elasticsearch:
+    image: elasticsearch:8.13.0
+    container_name: elastic_coinedu
     environment:
-      - DB_HOST=db  # Nome do serviço acima
-      - REDIS_HOST=redis
-      - DB_USER=user
-      - DB_PASSWORD=password
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data
+
+
+
+volumes:
+  postgres_data:
+  elastic_data:
