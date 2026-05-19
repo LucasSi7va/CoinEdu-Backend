@@ -36,20 +36,43 @@ public class EmailService {
 
                     """.formatted(codigo));
         }
-        else {
-            msg.setSubject("CoinEdu - Código de acesso");
-            msg.setText("""
-                    Aqui está seu código de acesso ao CoinEdu:
-                    
-                    %s
-                    
-                    O codigo expira em 15 minutos.
-                    Se não foi você , ignore este e-mail.
-                    """.formatted(codigo));
-        }
         mailSender.send(msg);
     }
 
 
 
-}
+    public void enviarEmail(String destinatario, String assunto, String corpo) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+
+        msg.setTo(destinatario);
+        msg.setSubject(assunto);
+        msg.setText(corpo);
+
+        mailSender.send(msg);
+    }
+
+    public void enviarAlertaQueda(String email, String nome, String moeda, Double preco, double variacao) {
+        String assunto = "📉 " + moeda + " caiu " + String.format("%.1f", Math.abs(variacao)) + "%!";
+        String corpo = "Olá, " + nome + "!\n\n"
+                + moeda + " caiu " + String.format("%.1f", Math.abs(variacao)) + "% "
+                + "e está em R$ " + String.format("%.2f", preco) + ".\n\n"
+                + "Pode ser um bom momento para comprar!\n\n"
+                + "Acesse o CoinEdu para acompanhar."
+                + "http://localhost:5173/";
+
+        enviarEmail(email, assunto, corpo);
+    }
+
+    public void enviarAlertaSubida(String email, String nome, String moeda, Double preco, double variacao) {
+        String assunto = "📈 " + moeda + " subiu " + String.format("%.1f", variacao) + "%!";
+        String corpo = "Olá, " + nome + "!\n\n"
+                + moeda + " subiu " + String.format("%.1f", variacao) + "% "
+                + "e está em R$ " + String.format("%.2f", preco) + ".\n\n"
+                + "Pode ser um bom momento para vender!\n\n"
+                + "Acesse o CoinEdu para acompanhar."
+                + "http://localhost:5173/";
+
+        enviarEmail(email, assunto, corpo);
+    }
+    }
+

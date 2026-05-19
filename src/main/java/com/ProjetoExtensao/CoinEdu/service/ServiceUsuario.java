@@ -39,6 +39,23 @@ public class ServiceUsuario {
 
     public final Map<String , Integer> tentativas = new ConcurrentHashMap<>();
 
+    public ResponseEntity<List<UsuarioDto>> listartodos() {
+        List<Usuario> usuarios = usuarioRepository.findUsuariosComFavoritos();
+
+        List<UsuarioDto> dtos = usuarios.stream()
+                .map(u -> new UsuarioDto(
+                        u.getId(),
+                        u.getNome(),
+                        u.getEmail(),
+                        u.getSenha(),
+                        u.getFotoPerfil(),
+                        u.getCapaPerfil()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
 
     public ResponseEntity<UsuarioDto> getIdUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Id nao encontrado"));
@@ -153,13 +170,10 @@ public class ServiceUsuario {
             throw new RuntimeException("Senha invãlida");
         }
 
-       List<MoedaDto> favoritas = serviceMoedaAPI.getMercado()
-               .stream()
-               .filter(m -> usuario.getCarteira()
-                       .getMoedasFavoritas()
-                       .contains(m.id())).toList();
+       List<String> favoritas = usuario.getCarteira().getMoedasFavoritas();
 
         return ResponseEntity.ok(new UsuarioCarteiraDTO(
+        usuario.getId(),
         usuario.getNome() ,
         usuario.getEmail() ,
         usuario.getFotoPerfil(),
@@ -210,5 +224,20 @@ public class ServiceUsuario {
                 usuario.getSenha(),
                 usuario.getModoIdoso()
         ));
+    }
+
+    public ResponseEntity<String> atualizarUsuario(String email,String nome, String senha) {
+
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+
+        usuario.setNome(nome);
+        usuario.setSenha(senha);
+
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.ok("nome e senha atualizada com sucesso");
+
+
     }
 }

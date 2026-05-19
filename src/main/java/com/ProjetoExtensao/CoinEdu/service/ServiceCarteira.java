@@ -27,45 +27,32 @@ public class ServiceCarteira {
 
 
     public ResponseEntity<String> salvarCarteira(Long idUsuario, String moeda) {
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
 
         Carteira carteira = usuario.getCarteira();
-
-        boolean existe = serviceMoedaAPI.getMercado()
-                .stream()
-                .anyMatch(moedaDto -> moedaDto.id().equals(moeda));
-
-        if (!existe) {
-            throw new RuntimeException("Moeda nao encontrada");
-        }
 
         if (carteira.getMoedasFavoritas().contains(moeda)) {
             throw new RuntimeException("Moeda ja esta na carteira");
         }
 
         carteira.getMoedasFavoritas().add(moeda);
-
         carteiraRepository.save(carteira);
 
         return ResponseEntity.ok("Moeda adicionada com sucesso");
     }
 
     public ResponseEntity<String> removerCarteira(Long idUsuario, String moeda) {
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
 
         Carteira carteira = usuario.getCarteira();
-
-        boolean existe = serviceMoedaAPI.getMercado().stream().anyMatch(moedaDto -> moedaDto.id().equals(moeda));
-        if (!existe) {
-            throw new RuntimeException("Moeda nao encontrada");
-        }
 
         if (!carteira.getMoedasFavoritas().contains(moeda)) {
             throw new RuntimeException("Moeda nao esta na carteira");
         }
 
         carteira.getMoedasFavoritas().remove(moeda);
-
         carteiraRepository.save(carteira);
 
         return ResponseEntity.ok("Moeda removida com sucesso");
@@ -73,25 +60,19 @@ public class ServiceCarteira {
 
 
 
-    public ResponseEntity<SimulacaoDto> simularCompra(Long usuarioId, String moedaId, BigDecimal valorCompra) {
+    public ResponseEntity<SimulacaoDto> simularCompra(Long usuarioId, String moedaId, BigDecimal valorCompra , BigDecimal precoAtual) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
 
-        boolean moedaCarteira = usuario.getCarteira().getMoedasFavoritas().contains(moedaId);
-
-        if (!moedaCarteira) {
-            throw new RuntimeException("Moeda nao esta na carteira");
-        }
-
-        MoedaDto moeda = serviceMoedaAPI.getMoedaPorId(moedaId);
-
-        BigDecimal precoAtual = BigDecimal.valueOf(moeda.precoAtual());
-        BigDecimal quantidade = valorCompra.divide(precoAtual, 8, RoundingMode.HALF_UP);
+       if (!usuario.getCarteira().getMoedasFavoritas().contains(moedaId)) {
+           throw new RuntimeException("Moeda nao esta na carteira");
+       }
+       BigDecimal quantidade = valorCompra.divide(precoAtual , 8 , RoundingMode.HALF_UP);
 
         return ResponseEntity.ok(new SimulacaoDto(
-                moeda.id(),
-                moeda.nome(),
+                moedaId,
+                moedaId,
                 valorCompra,
                 precoAtual,
                 quantidade

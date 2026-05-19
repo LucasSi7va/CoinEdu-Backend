@@ -15,15 +15,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario , Long> {
 
     boolean existsByEmail(String email);
 
-    Optional<Usuario>  findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 
-    @Query("""
-    SELECT u FROM Usuario u JOIN FETCH u.carteira WHERE 
-    (:email IS NULL OR u.email ILIKE :email) AND
-    (:nome IS NULL OR u.nome ILIKE :nome)
-""")
-    Optional<Usuario> buscarPorCompleto(
-            @Param("email") String email,
-            @Param("nome") String nome
-    );
+    @Query("SELECT u FROM Usuario u WHERE u.carteira.moedasFavoritas IS NOT EMPTY")
+    List<Usuario> findUsuariosComFavoritos();
 }

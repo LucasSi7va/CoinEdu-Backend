@@ -108,7 +108,7 @@ public class ServiceMoedaAPI {
                         return null;
                     }
                 })
-                .filter(Objects::nonNull) // Remove os nulos
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

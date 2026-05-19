@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -23,6 +24,12 @@ private final ServiceUsuario serviceUsuario;
 
 @Autowired
 private final ServiceCarteira serviceCarteira;
+
+
+@GetMapping
+public ResponseEntity<List<UsuarioDto>> listResponseEntity() {
+    return serviceUsuario.listartodos();
+}
 
 
 @GetMapping("{id}")
@@ -59,6 +66,12 @@ public ResponseEntity<String> ajustarFotoECapa(@RequestBody PerfilRequestDto req
 }
 
 
+@PutMapping("/atualizar-usuario")
+public ResponseEntity<String> editarNome(@RequestParam String nome , @RequestParam String senha , @RequestParam String email)
+{
+    return serviceUsuario.atualizarUsuario(email ,  nome , senha);
+}
+
 @PostMapping("/carteira/favoritar")
 public ResponseEntity<String> favoritar(
         @RequestParam Long usuarioId,
@@ -84,9 +97,10 @@ public ResponseEntity<String> favoritar(
     public ResponseEntity<SimulacaoDto> simularCompra(
             @RequestParam String moeda,
             @RequestParam BigDecimal valorCompra,
-            @RequestParam Long usuarioId) {
+            @RequestParam Long usuarioId,
+            @RequestParam BigDecimal precoAtual) {
 
-        return serviceCarteira.simularCompra(usuarioId, moeda, valorCompra);
+        return serviceCarteira.simularCompra(usuarioId ,  moeda , valorCompra  , precoAtual);
     }
 
 
