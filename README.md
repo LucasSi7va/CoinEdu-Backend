@@ -243,6 +243,11 @@ Componentes principais:
 
 #Funfionamento do sistema
 
+Codigo todo esta na segunda branch aqui:
+
+![Projeto](https://github.com/LucasSi7va/CoinEdu-Backend/tree/pt1)
+
+
 para rodar o sistema voce precisa abrir uma linha de comando dentro do projeto e digitar:
 
 ```
