@@ -249,5 +249,7 @@ para rodar o sistema voce precisa abrir uma linha de comando dentro do projeto e
 docker compose up -d
 ```
 
+# Parte do frontend e so Clicar Em PARTE 2
 
+# ![PARTE 2](https://github.com/LucasSi7va/EduCoin-Front)
 
