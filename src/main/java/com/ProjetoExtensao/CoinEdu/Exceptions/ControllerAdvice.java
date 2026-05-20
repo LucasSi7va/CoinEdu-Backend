@@ -23,6 +23,18 @@ public class ControllerAdvice {
 }
 
 
+@ExceptionHandler(RuntimeException.class)
+public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException exception) {
+
+    ErrorResponse errorResponse =
+            new ErrorResponse(503, exception.getMessage());
+
+    return ResponseEntity
+            .status(HttpStatus.SERVICE_UNAVAILABLE)
+            .body(errorResponse);
+}
+
+
 @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception exception) {
     ErrorResponse errorResponse = new ErrorResponse(500 , "Erro interno do servidor");
